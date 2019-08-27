@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 
 #include <openssl/aes.h>
+#include <openssl/modes.h>
 #include <openssl/bn.h>
 #include <openssl/err.h>
 
@@ -179,7 +180,7 @@ static int aes_128_ctr (const unsigned char key[AES_KEYSIZE_128],
   }
 
   AES_set_encrypt_key(&key[0], 128, &akey);
-  AES_ctr128_encrypt(in, out, length, &akey, iv, tmp, &num);
+  CRYPTO_ctr128_encrypt(in, out, length, &akey, iv, tmp, &num, (block128_f)AES_encrypt);
 
   return 0;
 }
